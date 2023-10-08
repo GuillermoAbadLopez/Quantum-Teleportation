@@ -1,1 +1,6 @@
-from functions import entanglement_bell_pair, alice_state_qubits, measure_classical_send,  bob_apply_gates, random_state
+from helper_functions import (
+    random_state,
+    counts_of_one_register,
+    get_probabilities,
+    create_network_graph,
+)

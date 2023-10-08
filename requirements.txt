@@ -2,3 +2,4 @@ matplotlib==3.8.0
 numpy==1.26.0
 qiskit==0.44.2
 pylatexenc==2.10
+networkx==3.1
