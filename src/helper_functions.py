@@ -1,9 +1,12 @@
 """Helper functions file."""
+from typing import Any
 import numpy as np
 import networkx as nx
 import pylab as plt
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
 from qiskit.extensions import Initialize
+from qiskit.visualization import plot_histogram
+from qiskit import execute
 
 
 def random_state(nqubits: int):
@@ -64,6 +67,14 @@ def get_probabilities(counts: dict) -> dict:
     norm = sum(counts.values())
     return {i: count/norm for i, count in counts.items()}
 
+
+def execute_get_probabilities_and_plot(circuit: QuantumCircuit, backend: Any, shots: int, register: int):
+    
+    counts = execute(circuit, backend, shots=shots).result().get_counts()
+    bob_counts = counts_of_one_register(counts, register)
+    probabilities = get_probabilities(bob_counts)
+    return plot_histogram(probabilities)
+            
 
 def create_networkx_graph(edges: dict) -> nx.Graph:
     """Create a networkx graph from a dicionary of edges.
@@ -178,4 +189,3 @@ def create_secure_quantum_teleportation_path_circuit(init_gate: Initialize, edge
     teleport_network_circuit.measure(len(edges)*2,len(edges)*2)
     
     return teleport_network_circuit
-            
