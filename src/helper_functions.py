@@ -1,4 +1,7 @@
-"""Helper functions file."""
+"""Helper functions file.
+
+This module contains helper functions for quantum information tasks.
+"""
 from typing import Any
 import numpy as np
 import networkx as nx
@@ -69,7 +72,17 @@ def get_probabilities(counts: dict) -> dict:
 
 
 def execute_get_probabilities_and_plot(circuit: QuantumCircuit, backend: Any, shots: int, register: int):
-    
+    """Executes circuit, gets probabilities and plots.
+
+    Args:
+       circuit (QuantumCircuit): Circuit to execute.
+       backend (Any): Backend to run on. 
+       shots (int): Number of shots.
+       register (int): Register to get the probabilities from and plot them.
+
+    Returns:
+       Plot figure.
+    """
     counts = execute(circuit, backend, shots=shots).result().get_counts()
     bob_counts = counts_of_one_register(counts, register)
     probabilities = get_probabilities(bob_counts)
