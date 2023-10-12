@@ -180,6 +180,8 @@ def create_secure_quantum_teleportation_path_circuit(init_gate: Initialize, edge
     for i in range(len(edges)):
         teleport_network_circuit.h(2*i+1) 
         teleport_network_circuit.cx(2*i+1,2*i+2)
+        
+    teleport_network_circuit.barrier()
     
     # After some time, now Alice wants to teleport a state to Bob, given by:
     teleport_network_circuit.append(init_gate, [0])
