@@ -159,8 +159,8 @@ def create_secure_quantum_teleportation_path_circuit(init_gate: Initialize, edge
     
     q_registers1, q_registers2 = [], []
     for edge in edges:
-        q_registers1.append(QuantumRegister(1, f"{edge[0]} q entg {edge[1]}"))
-        q_registers2.append(QuantumRegister(1, f"{edge[1]} q entg {edge[0]}"))
+        q_registers1.append(QuantumRegister(1, f"{edge[0]} q entg w {edge[1]}"))
+        q_registers2.append(QuantumRegister(1, f"{edge[1]} q entg w {edge[0]}"))
     
     c_registers1, c_registers2 = [], []
     for edge in edges:
