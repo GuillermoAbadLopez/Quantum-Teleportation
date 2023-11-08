@@ -195,8 +195,8 @@ def create_secure_quantum_teleportation_path_circuit(init_gate: Initialize, edge
     teleport_network_circuit.barrier()
     
     for i in range(len(edges)):
-        teleport_network_circuit.z(2*len(edges)).c_if(c_registers1[i], 2*i+1)  #if cr1 is 1 apply Z gate
-        teleport_network_circuit.x(2*len(edges)).c_if(c_registers2[i], 2*i+1)  #if cr2 is 1 apply X gate
+        teleport_network_circuit.z(2*len(edges)).c_if(c_registers1[i], 1)  #if cr1 is 1 apply Z gate
+        teleport_network_circuit.x(2*len(edges)).c_if(c_registers2[i], 1)  #if cr2 is 1 apply X gate
 
 
     cr_result = ClassicalRegister(1, "meas")
