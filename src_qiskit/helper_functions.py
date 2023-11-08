@@ -12,7 +12,7 @@ from qiskit.visualization import plot_histogram
 from qiskit import execute
 
 
-def random_state(nqubits: int):
+def random_state(nqubits: int) -> np.ndarray:
     """Generates a random nqubit state vector.
     
     Args:
