@@ -1,14 +1,26 @@
+# Copyright 2024 Guillermo Abad Lopez
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """Helper functions file.
 
 This module contains helper functions for quantum information tasks.
 """
-import numpy as np
-import networkx as nx
 import matplotlib.pyplot as plt
-
-
-from qiskit.visualization import plot_histogram
+import networkx as nx
+import numpy as np
 from qibo import Circuit, gates
+from qiskit.visualization import plot_histogram
 
 
 def random_state():
@@ -18,8 +30,8 @@ def random_state():
         tuple: Randomly generated state angles theta, phi.
     """
     # Generate phi an theta for the state vector:
-    theta = np.pi * (np.random.random()*2-1)
-    phi = np.pi * (np.random.random()*2-1)
+    theta = np.pi * (np.random.random() * 2 - 1)
+    phi = np.pi * (np.random.random() * 2 - 1)
 
     return theta, phi
 
@@ -34,8 +46,8 @@ def print_random_state(theta, phi):
     Returns:
         Prints of coefficeints and probabilities for the state vector.
     """
-    alpha, beta = np.cos(theta/2), np.sin(theta/2)*np.exp(phi*1.j)*-1.j
-    prob_a, prob_b = np.cos(theta/2)**2, np.sin(theta/2)**2
+    alpha, beta = np.cos(theta / 2), np.sin(theta / 2) * np.exp(phi * 1.0j) * -1.0j
+    prob_a, prob_b = np.cos(theta / 2) ** 2, np.sin(theta / 2) ** 2
     print(f"Theta: {str(theta)}, Phi: {str(phi)}")
     print(f"State: alpha={alpha}  beta={beta}")
     print(f"Probabilities: prob_a={prob_a}  prob_b={prob_b}\n")
@@ -84,7 +96,7 @@ def get_probabilities(counts: dict) -> dict:
         dict: The probabilities associated to the given counts.
     """
     norm = sum(counts.values())
-    return {i: count/norm for i, count in counts.items()}
+    return {i: count / norm for i, count in counts.items()}
 
 
 def execute_get_samples_and_plot(circuit: Circuit, shots: int):
@@ -139,7 +151,7 @@ def print_networkx_graph(G: nx.Graph, labels: dict):
     Returns:
         Displays the passed graph.
     """
-    options = {"node_size": 1000, "node_color": "blue", "with_labels": True, "font_weight":'bold'}
+    options = {"node_size": 1000, "node_color": "blue", "with_labels": True, "font_weight": "bold"}
     pos = nx.spring_layout(G)
 
     nx.draw(G, pos, **options)
@@ -162,11 +174,7 @@ def compute_network_path(graph: nx.Graph, sender: str, receiver: str) -> list[tu
     paths = list(nx.shortest_simple_paths(graph, sender, receiver))
     shortest_path = paths[0]
 
-    return [
-        (node, shortest_path[i + 1])
-        for i, node in enumerate(shortest_path)
-        if i != len(shortest_path) - 1
-    ]
+    return [(node, shortest_path[i + 1]) for i, node in enumerate(shortest_path) if i != len(shortest_path) - 1]
 
 
 def create_secure_quantum_teleportation_path_circuit(init_gate: tuple, edges: list[tuple]):
@@ -180,26 +188,26 @@ def create_secure_quantum_teleportation_path_circuit(init_gate: tuple, edges: li
         QuantumCircuit: Returns the builded circuit.
     """
     # Define the circuit quantum channels:
-    teleport_network_circuit = Circuit(1+2*len(edges))
+    teleport_network_circuit = Circuit(1 + 2 * len(edges))
 
     for i in range(len(edges)):
-        teleport_network_circuit.add(gates.H(2*i+1))
-        teleport_network_circuit.add(gates.CNOT(2*i+1, 2*i+2))
+        teleport_network_circuit.add(gates.H(2 * i + 1))
+        teleport_network_circuit.add(gates.CNOT(2 * i + 1, 2 * i + 2))
 
     # After some time, now Alice wants to teleport a state to Bob, given by:
     theta, phi = init_gate
     teleport_network_circuit.add(gates.U1q(q=0, theta=theta, phi=phi))
 
     for i in range(len(edges)):
-        teleport_network_circuit.add(gates.CNOT(2*i, 2*i+1))
-        teleport_network_circuit.add(gates.H(2*i))
-        teleport_network_circuit.add(gates.M(2*i))
-        teleport_network_circuit.add(gates.M(2*i+1))
+        teleport_network_circuit.add(gates.CNOT(2 * i, 2 * i + 1))
+        teleport_network_circuit.add(gates.H(2 * i))
+        teleport_network_circuit.add(gates.M(2 * i))
+        teleport_network_circuit.add(gates.M(2 * i + 1))
 
     for i in range(len(edges)):
-        teleport_network_circuit.add(gates.CZ(2*i, 2*len(edges)))
-        teleport_network_circuit.add(gates.CNOT(2*i+1, 2*len(edges)))
+        teleport_network_circuit.add(gates.CZ(2 * i, 2 * len(edges)))
+        teleport_network_circuit.add(gates.CNOT(2 * i + 1, 2 * len(edges)))
 
-    teleport_network_circuit.add(gates.M(len(edges)*2))
+    teleport_network_circuit.add(gates.M(len(edges) * 2))
 
     return teleport_network_circuit
